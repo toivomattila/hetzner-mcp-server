@@ -33,7 +33,7 @@ const DOMAIN_SPLITS: Record<string, Split> = {
   servers: {
     bin: 'hetzner-mcp-servers',
     registrars: [registerServerTools, registerReferenceDataTools, registerPricingTools],
-    toolCount: 32,
+    toolCount: 30,
   },
   networking: {
     bin: 'hetzner-mcp-networking',

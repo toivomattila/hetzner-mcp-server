@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- This fork no longer registers `hetzner_create_server` or `hetzner_delete_server`. Rebuild, hard reset, and root-password reset remain available.
+
 ## [3.0.1] — 2026-10-03
 
 ### Changed

@@ -106,60 +106,6 @@ describe('Servers tools — path, method, and body/params shape', () => {
     });
   });
 
-  it('hetzner_create_server: POST /servers with full body', async () => {
-    const server = await setupServer();
-    await callTool(server, 'hetzner_create_server', {
-      name: 'web-1',
-      server_type: 'cx22',
-      image: 'ubuntu-22.04',
-      location: 'fsn1',
-      ssh_keys: ['key-name', 123],
-      networks: [4711],
-      firewalls: [{ firewall: 99 }],
-      user_data: '#cloud-config',
-      labels: { env: 'prod' },
-      placement_group: 7,
-      public_net: { enable_ipv4: true, enable_ipv6: false },
-      automount: false,
-      start_after_create: true,
-    });
-    expect(mockRequest).toHaveBeenCalledWith({
-      method: 'POST',
-      url: '/servers',
-      data: {
-        name: 'web-1',
-        server_type: 'cx22',
-        image: 'ubuntu-22.04',
-        location: 'fsn1',
-        ssh_keys: ['key-name', 123],
-        networks: [4711],
-        firewalls: [{ firewall: 99 }],
-        user_data: '#cloud-config',
-        labels: { env: 'prod' },
-        placement_group: 7,
-        public_net: { enable_ipv4: true, enable_ipv6: false },
-        automount: false,
-        start_after_create: true,
-      },
-      params: undefined,
-    });
-  });
-
-  it('hetzner_create_server: POST /servers with minimal body', async () => {
-    const server = await setupServer();
-    await callTool(server, 'hetzner_create_server', {
-      name: 'minimal',
-      server_type: 'cx22',
-      image: 'ubuntu-22.04',
-    });
-    expect(mockRequest).toHaveBeenCalledWith({
-      method: 'POST',
-      url: '/servers',
-      data: { name: 'minimal', server_type: 'cx22', image: 'ubuntu-22.04' },
-      params: undefined,
-    });
-  });
-
   it('hetzner_update_server: PUT /servers/{id} strips id from body', async () => {
     const server = await setupServer();
     await callTool(server, 'hetzner_update_server', { id: 42, name: 'renamed', labels: { env: 'staging' } });
@@ -167,17 +113,6 @@ describe('Servers tools — path, method, and body/params shape', () => {
       method: 'PUT',
       url: '/servers/42',
       data: { name: 'renamed', labels: { env: 'staging' } },
-      params: undefined,
-    });
-  });
-
-  it('hetzner_delete_server: DELETE /servers/{id}', async () => {
-    const server = await setupServer();
-    await callTool(server, 'hetzner_delete_server', { id: 42 });
-    expect(mockRequest).toHaveBeenCalledWith({
-      method: 'DELETE',
-      url: '/servers/42',
-      data: undefined,
       params: undefined,
     });
   });
