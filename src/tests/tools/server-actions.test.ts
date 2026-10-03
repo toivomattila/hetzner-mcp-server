@@ -285,30 +285,4 @@ describe('miscellaneous server + network actions — path and body shape', () =>
       params: undefined,
     });
   });
-
-  it('hetzner_reset_server_password: POST /servers/{id}/actions/reset_password (no body) and surfaces root_password', async () => {
-    const { McpServerCls } = await loadFreshServer();
-    // Reset-password returns a one-time root_password alongside the action.
-    mockRequest.mockResolvedValueOnce({
-      data: { action: { id: 9, status: 'running' }, root_password: 'zaq1XSW@cde3' },
-    });
-    const { registerServerTools } = await import('../../tools/servers.js');
-    const server = new McpServerCls({ name: 't', version: '0.0.0' });
-    registerServerTools(server);
-
-    const result = (await callTool(server, 'hetzner_reset_server_password', { id: 42 })) as {
-      content: { text: string }[];
-      structuredContent?: { root_password?: string };
-    };
-
-    expect(mockRequest).toHaveBeenCalledWith({
-      method: 'POST',
-      url: '/servers/42/actions/reset_password',
-      data: undefined,
-      params: undefined,
-    });
-    // The generated root password must be surfaced to the caller.
-    expect(result.structuredContent?.root_password).toBe('zaq1XSW@cde3');
-    expect(result.content[0].text).toContain('zaq1XSW@cde3');
-  });
 });

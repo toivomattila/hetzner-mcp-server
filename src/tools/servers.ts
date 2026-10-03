@@ -407,18 +407,4 @@ export function registerServerTools(server: McpServer): void {
     },
     handleToolRequest(async (params) => hetznerRequest('POST', `/servers/${params.id}/actions/remove_from_placement_group`))
   );
-
-  // Reset server root password
-  server.registerTool(
-    'hetzner_reset_server_password',
-    {
-      title: 'Reset Server Root Password',
-      description: 'Reset the root password of a server. The server is rebooted and a new root password is returned in the result.',
-      inputSchema: z.object({
-        id: IdSchema.describe('Server ID'),
-      }),
-      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: true },
-    },
-    handleToolRequest(async (params) => hetznerRequest('POST', `/servers/${params.id}/actions/reset_password`))
-  );
 }

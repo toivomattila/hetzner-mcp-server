@@ -14,9 +14,10 @@ import { ALL_REGISTRARS } from '../../splits.js';
  *  - a generalized sweep asserting all four hints are present and boolean on
  *    EVERY tool, plus the sanity invariant that a tool can't be both
  *    read-only and destructive;
- *  - the original table-driven exact-value check for the 9 Wave-2 tools
+ *  - the original table-driven exact-value check for the remaining Wave-2 tools
  *    (expected values derived by reading the cited existing analog tool's
- *    annotations — see PLAN W2-A; `openWorldHint` is true for all 9).
+ *    annotations — see PLAN W2-A; `openWorldHint` is true for each of them).
+ *    `hetzner_reset_server_password` is no longer registered.
  */
 interface Hints {
   readOnlyHint: boolean;
@@ -31,7 +32,6 @@ const EXPECTED: Array<[string, Hints]> = [
   ['hetzner_detach_server_from_network', { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: true }],
   ['hetzner_add_server_to_placement_group', { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true }],
   ['hetzner_remove_server_from_placement_group', { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: true }],
-  ['hetzner_reset_server_password', { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: true }],
   ['hetzner_enable_lb_public_interface', { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true }],
   ['hetzner_disable_lb_public_interface', { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: true }],
   ['hetzner_change_lb_dns_ptr', { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true }],
