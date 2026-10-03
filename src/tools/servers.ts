@@ -37,40 +37,6 @@ export function registerServerTools(server: McpServer): void {
     handleToolRequest(async (params) => hetznerRequest('GET', `/servers/${params.id}`))
   );
 
-  // Create server
-  server.registerTool(
-    'hetzner_create_server',
-    {
-      title: 'Create Server',
-      description: 'Create a new server with the specified type, image, and configuration options.',
-      inputSchema: z.object({
-        name: z.string().describe('Name of the server'),
-        server_type: z.string().describe('Server type name or ID (e.g. "cx22", "cpx11")'),
-        image: z.string().describe('Image name or ID to use (e.g. "ubuntu-22.04", "debian-12")'),
-        location: z.string().optional().describe('Location name (e.g. "fsn1", "nbg1", "hel1")'),
-        ssh_keys: z.array(z.union([z.string(), z.number()])).optional().describe('SSH key names or IDs to inject'),
-        networks: z.array(z.number()).optional().describe('Network IDs to attach the server to'),
-        volumes: z.array(z.number().int()).optional().describe('Volume IDs to attach at creation'),
-        firewalls: z.array(z.object({
-          firewall: z.number().describe('Firewall ID'),
-        })).optional().describe('Firewalls to apply to the server'),
-        user_data: z.string().optional().describe('Cloud-init user data (base64 or plain text)'),
-        labels: LabelsSchema,
-        placement_group: z.number().optional().describe('Placement group ID'),
-        public_net: z.object({
-          enable_ipv4: z.boolean().optional().describe('Enable public IPv4 address'),
-          enable_ipv6: z.boolean().optional().describe('Enable public IPv6 address'),
-          ipv4: z.number().optional().describe('Primary IP ID for IPv4'),
-          ipv6: z.number().optional().describe('Primary IP ID for IPv6'),
-        }).optional().describe('Public network configuration'),
-        automount: z.boolean().optional().describe('Auto-mount the volumes passed in "volumes" after attach'),
-        start_after_create: z.boolean().optional().describe('Start server after creation (default: true)'),
-      }),
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true },
-    },
-    handleToolRequest(async (params) => hetznerRequest('POST', '/servers', params))
-  );
-
   // Update server
   server.registerTool(
     'hetzner_update_server',
@@ -88,20 +54,6 @@ export function registerServerTools(server: McpServer): void {
       const { id, ...body } = params;
       return hetznerRequest('PUT', `/servers/${id}`, body);
     })
-  );
-
-  // Delete server
-  server.registerTool(
-    'hetzner_delete_server',
-    {
-      title: 'Delete Server',
-      description: 'Permanently delete a server. This destroys the server and all associated data.',
-      inputSchema: z.object({
-        id: IdSchema.describe('Server ID'),
-      }),
-      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: true },
-    },
-    handleToolRequest(async (params) => hetznerRequest('DELETE', `/servers/${params.id}`))
   );
 
   // Power on
@@ -454,19 +406,5 @@ export function registerServerTools(server: McpServer): void {
       annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: true, openWorldHint: true },
     },
     handleToolRequest(async (params) => hetznerRequest('POST', `/servers/${params.id}/actions/remove_from_placement_group`))
-  );
-
-  // Reset server root password
-  server.registerTool(
-    'hetzner_reset_server_password',
-    {
-      title: 'Reset Server Root Password',
-      description: 'Reset the root password of a server. The server is rebooted and a new root password is returned in the result.',
-      inputSchema: z.object({
-        id: IdSchema.describe('Server ID'),
-      }),
-      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: true },
-    },
-    handleToolRequest(async (params) => hetznerRequest('POST', `/servers/${params.id}/actions/reset_password`))
   );
 }

@@ -13,16 +13,21 @@ function freshServer(name = 'test-server'): McpServer {
 }
 
 describe('Tool registration smoke tests', () => {
-  it('registers all 185 tools for full server', () => {
+  it('registers all 182 tools for full server', () => {
     const server = freshServer();
     for (const register of ALL_REGISTRARS) {
       register(server);
     }
     expect(toolCount(server)).toBe(TOTAL_TOOL_COUNT);
-    expect(TOTAL_TOOL_COUNT).toBe(185); // pin the literal so a split-count edit is deliberate
+    expect(TOTAL_TOOL_COUNT).toBe(182); // pin the literal so a split-count edit is deliberate
     const names = Object.keys((server as any)._registeredTools);
     expect(names).not.toContain('hetzner_list_datacenters');
     expect(names).not.toContain('hetzner_get_datacenter');
+    expect(names).not.toContain('hetzner_create_server');
+    expect(names).not.toContain('hetzner_delete_server');
+    expect(names).not.toContain('hetzner_reset_server_password');
+    expect(names).toContain('hetzner_rebuild_server');
+    expect(names).toContain('hetzner_reset');
     expect(names).toContain('hetzner_list_locations');
     expect(names).toContain('hetzner_list_server_types');
   });

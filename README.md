@@ -4,7 +4,7 @@
 
 MCP server for the [Hetzner Cloud API](https://docs.hetzner.cloud/). Manage servers, networks, volumes, firewalls, load balancers, and more through the Model Context Protocol.
 
-**185 tools** across 15 resource domains, with 9 entry points so you can pick the right server for your MCP client's tool limit. A read-only API-reference Resource (`reference://hetzner/api`) is also exposed on every entry point.
+**182 tools** across 15 resource domains, with 9 entry points so you can pick the right server for your MCP client's tool limit. A read-only API-reference Resource (`reference://hetzner/api`) is also exposed on every entry point.
 
 ## Installation
 
@@ -38,8 +38,8 @@ export HETZNER_STORAGE_API_TOKEN=your-storage-token-here  # optional
 
 | Command | Domains | Tools |
 |---|---|---|
-| `hetzner-mcp-server` | All 15 domains | 185 |
-| `hetzner-mcp-servers` | Servers, Locations/Server Types, Pricing | 33 |
+| `hetzner-mcp-server` | All 15 domains | 182 |
+| `hetzner-mcp-servers` | Servers, Locations/Server Types, Pricing | 30 |
 | `hetzner-mcp-networking` | Networks, Firewalls | 23 |
 | `hetzner-mcp-load-balancers` | Load Balancers, Certificates | 29 |
 | `hetzner-mcp-ips` | Floating IPs, Primary IPs | 21 |
@@ -117,9 +117,11 @@ Set `resource` on `hetzner_get_pricing` to `server_types`, `load_balancer_types`
 
 `hetzner_wait_for_action` accepts `domain`, `resource_id`, `action_id`, and an optional `timeout` in seconds (default 300, maximum 3600). It polls paginated per-resource action history and returns the full action when its status becomes `success` or `error`; missing or unknown statuses keep waiting until timeout. Supported domains are servers, load_balancers, volumes, networks, firewalls, floating_ips, primary_ips, certificates, images, zones, and storage_boxes; Storage Boxes use their separate API host. The deadline bounds requests and rate-limit delays, and MCP cancellation stops the wait.
 
-### Servers (27 tools) — servers
+### Servers (24 tools) — servers
 
-`hetzner_list_servers`, `hetzner_get_server`, `hetzner_create_server`, `hetzner_update_server`, `hetzner_delete_server`, `hetzner_power_on`, `hetzner_power_off`, `hetzner_reboot`, `hetzner_reset`, `hetzner_shutdown`, `hetzner_rebuild_server`, `hetzner_resize_server`, `hetzner_enable_rescue`, `hetzner_disable_rescue`, `hetzner_get_server_metrics`, `hetzner_list_server_actions`, `hetzner_change_server_protection`, `hetzner_request_console`, `hetzner_enable_backup`, `hetzner_disable_backup`, `hetzner_change_alias_ips`, `hetzner_change_dns_ptr`, `hetzner_attach_server_to_network`, `hetzner_detach_server_from_network`, `hetzner_add_server_to_placement_group`, `hetzner_remove_server_from_placement_group`, `hetzner_reset_server_password`
+`hetzner_list_servers`, `hetzner_get_server`, `hetzner_update_server`, `hetzner_power_on`, `hetzner_power_off`, `hetzner_reboot`, `hetzner_reset`, `hetzner_shutdown`, `hetzner_rebuild_server`, `hetzner_resize_server`, `hetzner_enable_rescue`, `hetzner_disable_rescue`, `hetzner_get_server_metrics`, `hetzner_list_server_actions`, `hetzner_change_server_protection`, `hetzner_request_console`, `hetzner_enable_backup`, `hetzner_disable_backup`, `hetzner_change_alias_ips`, `hetzner_change_dns_ptr`, `hetzner_attach_server_to_network`, `hetzner_detach_server_from_network`, `hetzner_add_server_to_placement_group`, `hetzner_remove_server_from_placement_group`
+
+This fork does not register `hetzner_create_server`, `hetzner_delete_server`, or `hetzner_reset_server_password`. Rebuild and hard reset stay registered.
 
 ### Images (7 tools) — storage
 
